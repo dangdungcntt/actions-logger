@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Actions</title>
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+
+<body class="learn-bar" >
+    <div id="app">
+        <section class="todoapp" style="margin-top: 130px; margin-bottom: 40px">
+            <header class="header">
+                <h1>action logs</h1>
+                <input autofocus="autofocus" autocomplete="off" placeholder="What needs to be log?" class="new-todo"
+                    v-model="text" @keyup="keyup($event, 'createLog')">
+                <img class="submit-button" style="position: absolute;right: 10px;top: 12px;cursor: pointer;"
+                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABmJLR0QA/wD/AP+gvaeTAAAA4UlEQVRYw+3TPYoCQRCG4cFdDyAb7UFEPJBm3mFCA8OqhkkUmf6+lrmCwZxCMN0DbLAX0M1kNPOnpWDqhUqbh6K6KDzP8x5OyZWCeyVXJoGBbBU8B7J1oAMd6EAH9glYVdXQLFDIqQA/GuPYHFDIqYJ/Cp4F/JXt9ssMsItT8BTIhZkN5sC9DJgL9xJgTtzTwNy4p4CS0qSDyz53AzVS34V7CFi27acCu+uH0kaQljkmAPO776Npmg+NrDvIY1XX34WlHNkr5O3HEfAQgJHZTQq4LstyYAp42WRMM5M4z+tj/8raN22VvzdxAAAAAElFTkSuQmCC"
+                    alt="">
+            </header>
+        </section>
+        <section class="todoapp" style="margin-bottom: 30px">
+            <header class="header">
+                <input autofocus="autofocus" autocomplete="off" placeholder="Search.." class="new-todo" style="padding: 12px 60px 12px 12px; font-size: 16px"
+                    v-model="q" @keyup="keyup($event, 'onSearch')"> 
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABtUlEQVRIx7WUO07DQBCGQwMFcAHgDtyGVwcFoPCo0oSOmi7YpnJB2J1FPkAKHgUEWjgADRQJIC4ARMoyv70WUcD2bjArraw44/n2n/lnK5WhFYbhtCfVrifp0pfU5f2JJ34HRDt+FE1VRl2elEuc7JW3ztkvHtHCKMn3+ON+nITo2hdq8VCpmSiKxo+Oo1kDbxtIPxBUdz05kvcCoTbzYhleRRzirZSg5mlZipIPQbQv6LmwJ2iokX3lUtJAqpvkO7ldAIjdolFzFwCrWDYHO88PTKyo0VAXABpvAJ0iBR8IhFtcAI1Wa8IA3v9FQUOIOSsF3KQLBMKqLgB23IoBnOUHYvyTwLZtcq31GFv01lh7K18B+xjjbya4agOANa3nAAsTmU5yEcQk7yWqVc2hplRP76J4iNjnaCTchWdcc1OWgf3WODmdt4bESiA77zaN/1c1JE8hnlBrnqB9KyeipmgcJhQWNHPSgVvw/qDZnEQcTj4AMVs9QK21osKyEq3+VFkiBGX5vZQlQVBzJMuC4L76MyS59LIgdFdKqbIgfP08lQLIggRSrpcG+IbQPe9HHtQNvPsCiS4P8rt8RgQAAAAASUVORK5CYII=" alt="" class="submit-button" style="position: absolute; right: 6px; top: 8px;padding: 5px; cursor: pointer;">
+            </header>
+        </section>
+
+        <div v-if="loading" class="loading"></div>
+        <div v-else-if="logs.length == 0" class="hide-when-loading loading" style="text-align: center;font-style: italic">Empty</div>
+        <section v-else class="todoapp hide-when-loading" v-for="log in logs" :id="`log-${log.id}`" :key="log.id">
+            <div class="item">
+                <section class="main">
+                    <ul class="todo-list">
+                        <li class="todo">
+                            <div class="view">
+                                {{ log.text }}
+                            </div>
+                        </li>
+                    </ul>
+                </section>
+                <footer class="footer">
+                    <span class="todo-count">
+                        <strong v-if="log.id">#{{ log.id }}</strong>
+                    </span>
+                    <span class="todo-time">
+                        <strong>{{ diffForhuman(log.created_at) }}</strong>
+                    </span>
+                </footer>
+            </div>
+        </section>
+        <div v-if="busy" class="loading" style="text-align: center">
+                <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        </div>
+        <div v-infinite-scroll="loadData" infinite-scroll-disabled="busy" infinite-scroll-distance="10"></div>
+        <footer class="info">
+            <p>Written by <a href="https://nddcoder.com" target="_blank">NDDCoder</a></p>
+            <p>Style from <a href="http://todomvc.com">TodoMVC</a></p>
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
+    <script src="https://unpkg.com/vue-infinite-scroll@2.0.2/vue-infinite-scroll.js"></script>
+    <script src="/js/app.js"></script>
+
+</body>
+
+</html>
