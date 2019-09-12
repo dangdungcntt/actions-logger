@@ -1,4 +1,4 @@
-FROM node:10-alpine
+FROM schlez/docker-node-gyp
 
 WORKDIR /usr/src/app
 

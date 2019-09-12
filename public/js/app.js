@@ -70,7 +70,7 @@ new Vue({
                     if (resJSON.token) {
                         this.jwtToken = resJSON.token
                         localStorage.setItem('jwtToken', resJSON.token)
-                        this.reload();
+                        location.reload();
                         return;
                     }
                 })
