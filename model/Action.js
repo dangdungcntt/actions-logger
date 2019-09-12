@@ -11,4 +11,4 @@ const schema = new mongoose.Schema({
 
 schema.plugin(AutoIncrement, {id: 'logs_seq', inc_field: 'id'});
 
-module.exports = mongoose.model('Log', schema)
+module.exports = mongoose.model('Action', schema)

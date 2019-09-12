@@ -7,8 +7,7 @@ const app = express()
 const mongodbUri = process.env.MONGODB_URI
 const port = process.env.APP_PORT
 
-const Log = require('./model/Log')
-
+const Action = require('./model/Action')
 
 mongoose.connect(mongodbUri, { useNewUrlParser: true, useUnifiedTopology: true }, err => {
     if (err) {
@@ -44,9 +43,7 @@ app.get('/api/logs', async (req, res) => {
         ]
     }
 
-    console.log(query)
-
-    let logs = await Log.find(query).sort({ id: -1 }).limit(limit)
+    let logs = await Action.find(query).sort({ id: -1 }).limit(limit)
 
     res.json({
         data: logs,
@@ -63,7 +60,7 @@ app.post('/api/logs', async (req, res) => {
     }
 
     res.json({
-        data: await new Log({
+        data: await new Action({
             text,
             created_at: new Date(),
             modified_at: new Date()

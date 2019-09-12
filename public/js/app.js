@@ -82,8 +82,8 @@ new Vue({
                 .then(res => res.json())
                 .then(resJSON => {
                     creating = false
+                    this.removeLogWithTime(time)
                     if (!resJSON.data) {
-                        this.removeLogWithTime(time)
                         return;
                     }
                     this.logs.unshift(resJSON.data)     
