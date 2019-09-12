@@ -8,7 +8,10 @@ new Vue({
             loading: true,
             busy: false,
             text: '',
-            q: this.getQueryString('q') || ''
+            q: this.getQueryString('q') || '',
+            username: '',
+            password: '',
+            jwtToken: localStorage.getItem('jwtToken')
         }
     },
     created() {
@@ -16,15 +19,25 @@ new Vue({
     },
     methods: {
         async loadData() {
-            if (!this.has_next || this.busy) {
+            if (!this.jwtToken || !this.has_next || this.busy) {
                 return;
             }
 
             this.busy = true
 
-            fetch(`/api/logs?last_id=${this.last_id || ''}&q=${this.q || ''}`)
+            fetch(`/api/logs?last_id=${this.last_id || ''}&q=${this.q || ''}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + this.jwtToken
+                }
+            })
                 .then(res => res.json())
                 .then(resJSON => {
+                    if (resJSON.error == 'Unauthenticated') {
+                        localStorage.removeItem('jwtToken');
+                        location.reload();
+                        return;
+                    }
+                    
                     this.busy = false
                     this.loading = false
 
@@ -32,11 +45,36 @@ new Vue({
                         this.has_next = false
                         return;
                     }
+
                     this.logs = this.logs.concat(resJSON.data)
                     this.last_id = resJSON.data[resJSON.data.length - 1].id
                 })
         },
+        login() {
+            if (! this.username || ! this.password) {
+                return
+            }
 
+            fetch(`/api/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: this.username,
+                    password: this.password
+                })
+            })
+                .then(res => res.json())
+                .then(resJSON => {
+                    if (resJSON.token) {
+                        this.jwtToken = resJSON.token
+                        localStorage.setItem('jwtToken', resJSON.token)
+                        this.reload();
+                        return;
+                    }
+                })
+        },
         onSearch() {
             if (this.q.trim().length === 0) {
                 this.q = ''
@@ -73,7 +111,8 @@ new Vue({
             fetch('/api/logs', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + this.jwtToken
                 },
                 body: JSON.stringify({
                     text: text
@@ -81,6 +120,12 @@ new Vue({
             })
                 .then(res => res.json())
                 .then(resJSON => {
+                    if (resJSON.error == 'Unauthenticated') {
+                        localStorage.removeItem('jwtToken');
+                        location.reload();
+                        return;
+                    }
+
                     creating = false
                     this.removeLogWithTime(time)
                     if (!resJSON.data) {
