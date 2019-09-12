@@ -1,10 +1,11 @@
 require('dotenv').config()
-
 const mongoose = require('mongoose')
 const express = require('express')
 const jwt = require('jsonwebtoken')
 const bodyParser = require('body-parser')
 const app = express()
+const http = require('http').createServer(app)
+const io = require('socket.io')(http);
 const mongodbUri = process.env.MONGODB_URI
 const port = process.env.APP_PORT
 
@@ -26,6 +27,22 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use(require('./controller/AuthController'))
+
+io.use(function (socket, next) {
+    if (socket.handshake.query && socket.handshake.query.token) {
+        jwt.verify(socket.handshake.query.token, process.env.JWT_KEY, function (err, decoded) {
+            if (err) return next(new Error('Authentication error'));
+
+            socket.user = decoded;
+            next();
+        });
+    } else {
+        next(new Error('Authentication error'));
+    }
+})
+    .on('connection', function (socket) {
+        console.log(`Client connected ${socket.id}`)
+    });
 
 app.use(function (req, res, next) {
     if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
@@ -66,10 +83,10 @@ app.get('/api/logs', async (req, res) => {
         ]
     }
 
-    let logs = await Action.find(query).sort({ id: -1 }).limit(limit)
+    let actions = await Action.find(query).sort({ id: -1 }).limit(limit)
 
     res.json({
-        data: logs,
+        data: actions,
     })
 })
 
@@ -82,12 +99,16 @@ app.post('/api/logs', async (req, res) => {
         })
     }
 
+    let action = await new Action({
+        text,
+        author: req.user.username
+    }).save()
+
     res.json({
-        data: await new Action({
-            text,
-            author: req.user.username
-        }).save()
+        data: action
     })
+
+    io.emit('new-action', action);
 })
 
-app.listen(port, () => console.log(`App listening on port ${port}!`))
+http.listen(port, () => console.log(`App listening on port ${port}!`))

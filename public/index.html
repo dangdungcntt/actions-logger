@@ -32,7 +32,7 @@
                         v-model="text" @keyup="keyup($event, 'createLog')">
                     <img class="submit-button" style="position: absolute;right: 10px;top: 12px;cursor: pointer;"
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABmJLR0QA/wD/AP+gvaeTAAAA4UlEQVRYw+3TPYoCQRCG4cFdDyAb7UFEPJBm3mFCA8OqhkkUmf6+lrmCwZxCMN0DbLAX0M1kNPOnpWDqhUqbh6K6KDzP8x5OyZWCeyVXJoGBbBU8B7J1oAMd6EAH9glYVdXQLFDIqQA/GuPYHFDIqYJ/Cp4F/JXt9ssMsItT8BTIhZkN5sC9DJgL9xJgTtzTwNy4p4CS0qSDyz53AzVS34V7CFi27acCu+uH0kaQljkmAPO776Npmg+NrDvIY1XX34WlHNkr5O3HEfAQgJHZTQq4LstyYAp42WRMM5M4z+tj/8raN22VvzdxAAAAAElFTkSuQmCC"
-                        alt="">
+                        alt="" @click="createLog">
                 </header>
             </section>
             <section class="todoapp" style="margin-bottom: 30px">
@@ -42,7 +42,8 @@
                         @keyup="keyup($event, 'onSearch')">
                     <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABmJLR0QA/wD/AP+gvaeTAAABtUlEQVRIx7WUO07DQBCGQwMFcAHgDtyGVwcFoPCo0oSOmi7YpnJB2J1FPkAKHgUEWjgADRQJIC4ARMoyv70WUcD2bjArraw44/n2n/lnK5WhFYbhtCfVrifp0pfU5f2JJ34HRDt+FE1VRl2elEuc7JW3ztkvHtHCKMn3+ON+nITo2hdq8VCpmSiKxo+Oo1kDbxtIPxBUdz05kvcCoTbzYhleRRzirZSg5mlZipIPQbQv6LmwJ2iokX3lUtJAqpvkO7ldAIjdolFzFwCrWDYHO88PTKyo0VAXABpvAJ0iBR8IhFtcAI1Wa8IA3v9FQUOIOSsF3KQLBMKqLgB23IoBnOUHYvyTwLZtcq31GFv01lh7K18B+xjjbya4agOANa3nAAsTmU5yEcQk7yWqVc2hplRP76J4iNjnaCTchWdcc1OWgf3WODmdt4bESiA77zaN/1c1JE8hnlBrnqB9KyeipmgcJhQWNHPSgVvw/qDZnEQcTj4AMVs9QK21osKyEq3+VFkiBGX5vZQlQVBzJMuC4L76MyS59LIgdFdKqbIgfP08lQLIggRSrpcG+IbQPe9HHtQNvPsCiS4P8rt8RgQAAAAASUVORK5CYII="
                         alt="" class="submit-button"
-                        style="position: absolute; right: 6px; top: 8px;padding: 5px; cursor: pointer;">
+                        style="position: absolute; right: 6px; top: 8px;padding: 5px; cursor: pointer;"
+                        @click="onSearch">
                 </header>
             </section>
 
@@ -64,7 +65,7 @@
                         <span class="todo-count">
                             <strong v-if="log.id">#{{ log.id }}</strong>
                         </span>
-                        <span class="todo-time">
+                        <span class="todo-time" :title="log.createdAt">
                             <strong>{{ log.author }} - {{ diffForhuman(log.createdAt) }}</strong>
                         </span>
                     </footer>
@@ -87,6 +88,7 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
     <script src="https://unpkg.com/vue-infinite-scroll@2.0.2/vue-infinite-scroll.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="/js/app.js"></script>
 
 </body>

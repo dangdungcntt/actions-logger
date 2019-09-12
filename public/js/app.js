@@ -11,11 +11,29 @@ new Vue({
             q: this.getQueryString('q') || '',
             username: '',
             password: '',
-            jwtToken: localStorage.getItem('jwtToken')
+            jwtToken: localStorage.getItem('jwtToken'),
+            socket: undefined
         }
     },
     created() {
         this.loadData()
+
+        if (this.jwtToken) {
+            this.socket = io.connect('/', {
+                query: { token: this.jwtToken }
+            });
+
+            this.socket.on('new-action', (action) => {
+                setTimeout(() => {
+                    for (let i = 0; i < this.logs.length; i++) {
+                        if (this.logs[i].id == action.id) {
+                            return
+                        }
+                    }
+                    this.logs.unshift(action)
+                }, 500)
+            })
+        }
     },
     methods: {
         async loadData() {
@@ -37,7 +55,7 @@ new Vue({
                         location.reload();
                         return;
                     }
-                    
+
                     this.busy = false
                     this.loading = false
 
@@ -51,7 +69,7 @@ new Vue({
                 })
         },
         login() {
-            if (! this.username || ! this.password) {
+            if (!this.username || !this.password) {
                 return
             }
 
@@ -131,7 +149,7 @@ new Vue({
                     if (!resJSON.data) {
                         return;
                     }
-                    this.logs.unshift(resJSON.data)     
+                    this.logs.unshift(resJSON.data)
                 })
                 .catch(err => {
                     this.removeLogWithTime(time)
@@ -189,7 +207,7 @@ new Vue({
             if ('URL' in window) {
                 let urlObj = new URL(window.location.href);
                 urlObj.searchParams.set(key, value);
-                window.history.replaceState({path:urlObj.toString()},'',urlObj.toString());
+                window.history.replaceState({ path: urlObj.toString() }, '', urlObj.toString());
             }
         },
         getQueryString(key) {
