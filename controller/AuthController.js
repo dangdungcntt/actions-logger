@@ -4,7 +4,7 @@ const router = express.Router()
 
 const User = require('../model/User')
 
-router.post('/api/auth/login', async (req, res) => {
+router.post('/login', async (req, res) => {
     let { username, password } = req.body
 
     if (!username || !password) {
@@ -28,7 +28,7 @@ router.post('/api/auth/login', async (req, res) => {
     });
 })
 
-router.post('/api/auth/register', async (req, res) => {
+router.post('/register', async (req, res) => {
     let { username, password, token } = req.body
 
     if (!username || !password) {
