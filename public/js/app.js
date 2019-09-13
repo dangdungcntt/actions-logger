@@ -12,7 +12,11 @@ new Vue({
             username: '',
             password: '',
             jwtToken: localStorage.getItem('jwtToken'),
-            socket: undefined
+            socket: undefined,
+            converter: new showdown.Converter({
+                simplifiedAutoLink: true,
+                excludeTrailingPunctuationFromURLs: true
+            })
         }
     },
     created() {
@@ -164,9 +168,12 @@ new Vue({
             }
         },
         keyup(event, funcName) {
-            if (event.which === 13 || event.keyCode === 13 || event.key === "Enter") {
+            if ((event.which === 13 || event.keyCode === 13 || event.key === "Enter") && ! event.shiftKey) {
                 this[funcName]();
             }
+        },
+        convertMarkdown(text) {
+            return this.converter.makeHtml(text)
         },
         diffForhuman(dateStr) {
             let inputDate = new Date(dateStr)

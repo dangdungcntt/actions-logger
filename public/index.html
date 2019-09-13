@@ -28,8 +28,10 @@
             <section class="todoapp" style="margin-top: 130px; margin-bottom: 40px">
                 <header class="header">
                     <h1>actions</h1>
-                    <input autofocus="autofocus" autocomplete="off" placeholder="What needs to be log?" class="new-todo"
-                        v-model="text" @keyup="keyup($event, 'createLog')">
+                    <textarea autofocus="autofocus" autocomplete="off" placeholder="What needs to be log?" class="new-todo"
+                    style="resize: none;height: 150px;"
+            
+                        v-model="text" @keyup="keyup($event, 'createLog')"></textarea>
                     <img class="submit-button" style="position: absolute;right: 10px;top: 12px;cursor: pointer;"
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAABmJLR0QA/wD/AP+gvaeTAAAA4UlEQVRYw+3TPYoCQRCG4cFdDyAb7UFEPJBm3mFCA8OqhkkUmf6+lrmCwZxCMN0DbLAX0M1kNPOnpWDqhUqbh6K6KDzP8x5OyZWCeyVXJoGBbBU8B7J1oAMd6EAH9glYVdXQLFDIqQA/GuPYHFDIqYJ/Cp4F/JXt9ssMsItT8BTIhZkN5sC9DJgL9xJgTtzTwNy4p4CS0qSDyz53AzVS34V7CFi27acCu+uH0kaQljkmAPO776Npmg+NrDvIY1XX34WlHNkr5O3HEfAQgJHZTQq4LstyYAp42WRMM5M4z+tj/8raN22VvzdxAAAAAElFTkSuQmCC"
                         alt="" @click="createLog">
@@ -55,9 +57,7 @@
                     <section class="main">
                         <ul class="todo-list">
                             <li class="todo">
-                                <div class="view">
-                                    {{ log.text }}
-                                </div>
+                                <div class="view" v-html="convertMarkdown(log.text)"></div>
                             </li>
                         </ul>
                     </section>
@@ -86,6 +86,7 @@
             <p>Style from <a href="http://todomvc.com">TodoMVC</a></p>
         </footer>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js"></script>
     <script src="https://unpkg.com/vue-infinite-scroll@2.0.2/vue-infinite-scroll.js"></script>
     <script src="/socket.io/socket.io.js"></script>
