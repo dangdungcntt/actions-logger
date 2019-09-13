@@ -15,7 +15,8 @@ new Vue({
             socket: undefined,
             converter: new showdown.Converter({
                 simplifiedAutoLink: true,
-                excludeTrailingPunctuationFromURLs: true
+                excludeTrailingPunctuationFromURLs: true,
+                literalMidWordUnderscores: true
             })
         }
     },
