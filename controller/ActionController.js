@@ -8,7 +8,7 @@ router.use(require('../middleware/AuthMiddleware'))
 
 router.get('/', async (req, res) => {
 
-    let limit = !req.query.limit || req.query.limit > 50 || req.query.limit < 1 ? 5 : req.query.limit
+    let limit = !req.query.limit || req.query.limit > 50 || req.query.limit < 1 ? 25 : req.query.limit
 
     let query = {}
 

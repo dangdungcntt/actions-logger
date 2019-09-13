@@ -17,6 +17,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.0",
     "mongoose-sequence": "^5.2.1",
+    "phin": "^3.4.0",
     "socket.io": "^2.2.0"
   }
 }

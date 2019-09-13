@@ -96,6 +96,8 @@ new Vue({
                         location.reload();
                         return;
                     }
+
+                    alert('Wrong username or password')
                 })
         },
         onSearch() {
