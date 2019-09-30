@@ -208,7 +208,7 @@ new Vue({
             return fuzzy
         },
         formatDate(date) {
-            return `${date.getFullYear()}-${this.zeroPad(date.getMonth())}-${this.zeroPad(date.getDate())} ${this.zeroPad(date.getHours())}:${this.zeroPad(date.getMinutes())}`
+            return `${date.getFullYear()}-${this.zeroPad(date.getMonth() + 1)}-${this.zeroPad(date.getDate())} ${this.zeroPad(date.getHours())}:${this.zeroPad(date.getMinutes())}`
         },
         zeroPad(number) {
             return number < 10 ? `0${number}` : number;
