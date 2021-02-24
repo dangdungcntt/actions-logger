@@ -1,10 +1,8 @@
-const socketio = require('../socket-handler')
+const socketio = require("../socket-handler");
 
 module.exports = {
     async send(action) {
         //send event to via socketio
-        socketio.emit('new-action', action)
+        socketio.emit("new-action", action);
     },
-}
-
-
+};

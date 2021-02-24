@@ -1,9 +1,9 @@
-const notification = require('../notification')
+const notification = require("../notification");
 
 const handle = async (action) => {
-    notification.send(action)
-}
+    notification.send(action);
+};
 
 module.exports = {
-    handle
-}
+    handle,
+};
